@@ -18,20 +18,20 @@ function mergeRanges(meetings) {
         // Set variable for checking if it's been merged
         let merged = false;
 
-        // Loop through merged meetings
-        for (let j = 0; j < mergedMeetings.length; j++) {
-            // If the current meeting's startTime is greater than or equal to the mergedMeeting's startTime AND the current meeting's endTime is less than or equal to the mergedMeeting's endTime, it is totally within the range of the meeting, and can be considered merged
-            if (meetings[i].startTime >= mergedMeetings[j].startTime && meetings[i].endTime <= mergedMeetings[j].endTime) {
-                merged = true;
-            } 
-            // If the current meeting's startTime is less than the mergedMeeting's endTime AND the current  meeting's endTime is greater than the mergedMeeting's endTime, the mergedMeeting's endTime can be changed to the current meeting's endTime, and the meetings are now merged
-            else if (meetings[i].startTime <= mergedMeetings[j].endTime && meetings[i].endTime > mergedMeetings[j].endTime) {
-                mergedMeetings[j].endTime = meetings[i].endTime;
-                merged = true;
-            }
+        // Last merged meeting
+        let lastMerged = mergedMeetings[mergedMeetings.length - 1];
+
+        // If the current meeting's startTime is greater than or equal to the lastMerged's startTime AND the current meeting's endTime is less than or equal to the lastMerged's endTime, it is totally within the range of the lastMerged, and can be considered merged
+        if (meetings[i].startTime >= lastMerged.startTime && meetings[i].endTime <= lastMerged.endTime) {
+            merged = true;
+        }
+        // If the current meeting's startTime is less than the lastMerged's endTime AND the current  meeting's endTime is greater than the lastMerged's endTime, the lastMerged's endTime can be changed to the current meeting's endTime, and the meetings are now merged
+        else if (meetings[i].startTime <= lastMerged.endTime && meetings[i].endTime > lastMerged.endTime) {
+            lastMerged.endTime = meetings[i].endTime;
+            merged = true;
         }
 
-        // If we looped through all the mergedMeetings and this current meeting could not be merged, we push it to the mergedMeetings
+        // If this current meeting could not be merged, we push it to the mergedMeetings
         if (merged === false) {
             mergedMeetings.push(meetings[i])
         }
